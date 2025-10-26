@@ -1,0 +1,28 @@
+{
+  "name": "iamfaazi/assessment-json",
+  "description": "Assessment Reporting",
+  "authors": [
+    {
+      "name": "FaAzI Ahamed",
+      "email": "faaziahamed@gmail.com"
+    }
+  ],
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Iamfaazi\\AssessmentJson\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.4.1"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  }
+}
