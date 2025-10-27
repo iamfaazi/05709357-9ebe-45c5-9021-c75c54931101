@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Tests
+.phpunit.result.cache
+coverage/
+
+# Documentation (not needed in container)
+*.md
+!composer.json
+!composer.lock
+
+# Vendor (will be installed in container)
+vendor/
+
+# Temporary files
+tmp/
+temp/

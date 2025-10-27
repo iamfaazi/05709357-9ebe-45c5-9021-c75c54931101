@@ -1,0 +1,62 @@
+services:
+  # Main application service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assessment-reporting-app
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: php bin/console
+    stdin_open: true
+    tty: true
+    environment:
+      - PHP_MEMORY_LIMIT=512M
+    networks:
+      - assessment-network
+
+  # Test runner service
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assessment-reporting-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: vendor/bin/phpunit tests --colors=always --testdox
+    environment:
+      - PHP_MEMORY_LIMIT=512M
+      - XDEBUG_MODE=coverage
+    networks:
+      - assessment-network
+
+  # Composer service for dependency management
+  composer:
+    image: composer:latest
+    container_name: assessment-reporting-composer
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: install
+    networks:
+      - assessment-network
+
+  # PHP CLI for running arbitrary commands
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assessment-reporting-php
+    volumes:
+      - .:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    networks:
+      - assessment-network
+
+networks:
+  assessment-network:
+    driver: bridge
