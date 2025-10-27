@@ -20,8 +20,8 @@ class FeedbackReport extends AbstractReportGenerator
         // Took assumption as Most Recently completed Assessment Progress one.
         $mostRecentCompletedAssessment = $this->loader->getMostRecentCompleted($studentId);
 
-        if (empty($mostRecentCompletedAssessment)) {
-            return "<e>Error: No completed assessments found for student ID: $studentId</e>\n";
+        if (empty($mostRecentCompletedAssessment) || !$mostRecentCompletedAssessment?->student) {
+            return "<error>Error: No completed assessments found for student ID: $studentId</error>\n";
         }
 
         $recentResponses = $mostRecentCompletedAssessment->responses;

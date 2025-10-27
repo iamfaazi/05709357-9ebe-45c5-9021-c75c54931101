@@ -19,11 +19,12 @@ class ProgressReport extends AbstractReportGenerator
         // Took assumption as Most Recently completed Assessment Progress one.
         $mostRecentCompletedAssessment = $this->loader->getMostRecentCompleted($studentId);
 
+        if (empty($mostRecentCompletedAssessment) || !$mostRecentCompletedAssessment?->student) {
+            return "<error>Error: No completed assessments found for student ID: $studentId</error>\n";
+        }
+
         $allResponses = $this->loader->getResponseByStudentAssessment($studentId, $mostRecentCompletedAssessment->assessmentId);
 
-        if (empty($allResponses)) {
-            return "<e>Error: No completed assessments found for student ID: $studentId</e>\n";
-        }
 
         // Group responses by attempt (each attempt has unique identifier)
         $attemptsByDate = $this->groupResponsesByAttempt($allResponses);
