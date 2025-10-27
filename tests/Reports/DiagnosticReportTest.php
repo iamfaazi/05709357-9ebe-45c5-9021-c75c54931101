@@ -28,6 +28,7 @@ class DiagnosticReportTest extends TestCase
         $this->commandTester = new CommandTester($command);
     }
 
+//$this->commandTester->setInputs(['student1', '']); // first answer for Student ID, second empty for next prompt
 
     public function testExecuteDisplaysPromptForStudentId(): void
     {

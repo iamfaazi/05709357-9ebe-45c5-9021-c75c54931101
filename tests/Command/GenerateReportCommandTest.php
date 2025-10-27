@@ -39,6 +39,8 @@ class GenerateReportCommandTest extends TestCase
 
     public function testExecuteDisplaysReportTypeChoices(): void
     {
+        $this->commandTester->setInputs(['student1', '']); // first answer for Student ID, second empty for next prompt
+
         $this->commandTester->execute([]);
 
         $output = $this->commandTester->getDisplay();
