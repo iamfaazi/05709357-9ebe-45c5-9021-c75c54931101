@@ -1,0 +1,129 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test on PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: [ '8.1', '8.2', '8.3' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: zip, json
+          coverage: xdebug
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php-version }}-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit tests --colors=always --testdox
+
+      - name: Run tests with coverage
+        if: matrix.php-version == '8.2'
+        run: ./vendor/bin/phpunit tests --coverage-text --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        if: matrix.php-version == '8.2'
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: zip, json
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Check code style (if PHPCS is installed)
+        run: |
+          if [ -f "vendor/bin/phpcs" ]; then
+            ./vendor/bin/phpcs src/ --standard=PSR12
+          else
+            echo "PHPCS not installed, skipping..."
+          fi
+        continue-on-error: true
+
+      - name: Static analysis (if PHPStan is installed)
+        run: |
+          if [ -f "vendor/bin/phpstan" ]; then
+            ./vendor/bin/phpstan analyse src/ --level=5
+          else
+            echo "PHPStan not installed, skipping..."
+          fi
+        continue-on-error: true
+
+  docker-build:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker-compose build
+
+      - name: Test Docker container
+        run: |
+          docker-compose run --rm composer install
+          docker-compose run --rm test
+
+  security-check:
+    name: Security Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Security check
+        run: |
+          composer audit || true
