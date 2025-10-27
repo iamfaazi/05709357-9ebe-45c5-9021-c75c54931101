@@ -91,22 +91,42 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check for docker-compose.yml
+        id: check-docker
         run: |
           if [ ! -f "docker-compose.yml" ]; then
             echo "docker-compose.yml not found, skipping Docker build..."
-            exit 0
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Docker Buildx
+        if: steps.check-docker.outputs.skip == 'false'
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: docker-compose build
+      - name: Build and start Docker services
+        if: steps.check-docker.outputs.skip == 'false'
+        run: docker compose up -d --build
 
-      - name: Test Docker container
-        run: |
-          docker-compose run --rm composer install
-          docker-compose run --rm test
+      - name: Wait for services to be ready
+        if: steps.check-docker.outputs.skip == 'false'
+        run: sleep 5
+
+      - name: Install dependencies in container
+        if: steps.check-docker.outputs.skip == 'false'
+        run: docker compose run --rm app composer install
+
+      - name: Run tests in container
+        if: steps.check-docker.outputs.skip == 'false'
+        run: docker compose run --rm app ./vendor/bin/phpunit tests --colors=always
+
+      - name: Show logs on failure
+        if: failure() && steps.check-docker.outputs.skip == 'false'
+        run: docker compose logs
+
+      - name: Stop Docker services
+        if: steps.check-docker.outputs.skip == 'false' && always()
+        run: docker compose down -v
 
   security-check:
     name: Security Check
