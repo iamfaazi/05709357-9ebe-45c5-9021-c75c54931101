@@ -19,8 +19,6 @@ class DiagnosticReport extends Report
             return "<error>Error: No completed assessments found for student ID: $studentId\n<error>";
         }
 
-
-
         // Calculate aggregated results from ALL responses
         $strandResults = $this->calculateAggregatedStrandResults($allResponses);
 

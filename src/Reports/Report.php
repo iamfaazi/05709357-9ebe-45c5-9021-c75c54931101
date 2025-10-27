@@ -56,8 +56,10 @@ abstract class Report implements iReport
 
     /**
      * Helper: Calculate strand results from ALL responses
+     * @param $allResponses
+     * @return array
      */
-    protected function calculateAggregatedStrandResults($allResponses)
+    protected function calculateAggregatedStrandResults($allResponses): array
     {
         $results = [];
 
@@ -127,5 +129,40 @@ abstract class Report implements iReport
         }
 
         die();
+    }
+
+    /**
+     * Get assessment name from the assessment data
+     *
+     * @param $studentId
+     * @return string
+     * @throws \Exception
+     */
+    protected function getAssessmentName($studentId): string
+    {
+        // Get the most recent assessment to extract the name
+        if (!empty($this->assessments)) {
+            $mostRecentAssessment = $this->loader->getMostRecentCompleted($studentId);
+            return $this->assessments[$mostRecentAssessment->assessmentId]->name ?? 'Assessment';
+        }
+
+        return 'Assessment';
+    }
+
+    /**
+     * Get student's first name
+     *
+     * @param mixed $studentId
+     * @return string
+     */
+    protected function getStudentFullName(?string $studentId): string
+    {
+        $student = $this->students[$studentId] ?? null;
+
+        if (!$student) {
+            return "Student";
+        }
+
+        return $student?->firstName . ' ' . $student?->lastName;
     }
 }

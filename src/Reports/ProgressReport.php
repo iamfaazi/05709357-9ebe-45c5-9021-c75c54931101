@@ -123,39 +123,4 @@ class ProgressReport extends Report
 
         return $attempts;
     }
-
-    /**
-     * Get student's first name
-     *
-     * @param mixed $studentId
-     * @return string
-     */
-    private function getStudentFullName($studentId): string
-    {
-        $student = $this->students[$studentId] ?? null;
-
-        if (!$student) {
-            return "Student";
-        }
-
-        return $student?->firstName . ' ' . $student?->lastName;
-    }
-
-    /**
-     * Get assessment name from the assessment data
-     *
-     * @param $studentId
-     * @return string
-     * @throws \Exception
-     */
-    private function getAssessmentName($studentId): string
-    {
-        // Get the most recent assessment to extract the name
-        if (!empty($this->assessments)) {
-            $mostRecentAssessment = $this->loader->getMostRecentCompleted($studentId);;
-            return $mostRecentAssessment->name ?? 'Assessment';
-        }
-
-        return 'Assessment';
-    }
 }
