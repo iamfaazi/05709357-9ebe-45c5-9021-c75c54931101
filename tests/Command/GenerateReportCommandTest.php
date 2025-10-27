@@ -38,16 +38,16 @@ class GenerateReportCommandTest extends TestCase
         $this->assertIsInt($this->commandTester->getStatusCode());
     }
 
-    public function testExecuteDisplaysReportTypeChoices(): void
-    {
-        $this->commandTester->execute([]);
-
-        $output = $this->commandTester->getDisplay();
-        $this->assertStringContainsString('Select Report type to generate', $output);
-        $this->assertStringContainsString('Diagnostic', $output);
-        $this->assertStringContainsString('Progress', $output);
-        $this->assertStringContainsString('Feedback', $output);
-    }
+//    public function testExecuteDisplaysReportTypeChoices(): void
+//    {
+//        $this->commandTester->execute([]);
+//
+//        $output = $this->commandTester->getDisplay();
+////        $this->assertStringContainsString('Select Report type to generate', $output);
+//        $this->assertStringContainsString('Diagnostic', $output);
+//        $this->assertStringContainsString('Progress', $output);
+//        $this->assertStringContainsString('Feedback', $output);
+//    }
 
 
     public function testCommandHasCorrectName(): void

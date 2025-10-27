@@ -27,7 +27,7 @@ class GenerateReportCommand extends Command
 
             $io = new SymfonyStyle($input, $output);
 
-            $io->title('Generate Diagnostic Report');
+            $io->title('Generate Assessments Reports');
             $io->block('Please enter the following');
 
             // --- Step 1: Ask for Student ID ---
