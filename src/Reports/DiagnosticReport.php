@@ -2,7 +2,7 @@
 
 namespace App\Reports;
 
-class DiagnosticReport extends Report
+class DiagnosticReport extends AbstractReportGenerator
 {
 
     /**

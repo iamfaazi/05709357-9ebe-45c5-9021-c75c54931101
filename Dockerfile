@@ -34,5 +34,9 @@ RUN chmod -R 755 /app
 
 RUN chmod +x bin/console
 
+RUN chmod 555 data/
+
+RUN chmod 444 data/*.json
+
 # Default command
 CMD ["php", "bin/console"]

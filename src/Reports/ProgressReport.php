@@ -2,7 +2,7 @@
 
 namespace App\Reports;
 
-class ProgressReport extends Report
+class ProgressReport extends AbstractReportGenerator
 {
     /**
      * Generate progress report showing improvement over time

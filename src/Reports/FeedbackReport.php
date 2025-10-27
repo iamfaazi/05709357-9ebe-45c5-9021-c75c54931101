@@ -2,7 +2,7 @@
 
 namespace App\Reports;
 
-class FeedbackReport extends Report
+class FeedbackReport extends AbstractReportGenerator
 {
     /**
      * Generate detailed feedback report for most recent assessment attempt

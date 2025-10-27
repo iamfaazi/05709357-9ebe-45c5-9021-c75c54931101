@@ -3,7 +3,7 @@
 namespace App\Factories;
 
 
-use App\Reports\Report;
+use App\Reports\AbstractReportGenerator;
 use App\Reports\FeedbackReport;
 use App\Reports\ProgressReport;
 use App\Reports\DiagnosticReport;
@@ -20,10 +20,10 @@ class ReportGeneratorFactory
      * Create report based on type
      *
      * @param string $type Report type: 'diagnostic', 'progress', 'feedback'
-     * @return Report
+     * @return AbstractReportGenerator
      * @throws \Exception
      */
-    public static function createReport(string $type): Report
+    public static function createReport(string $type): AbstractReportGenerator
     {
         return match (strtolower($type)) {
             'diagnostic' => new DiagnosticReport(),

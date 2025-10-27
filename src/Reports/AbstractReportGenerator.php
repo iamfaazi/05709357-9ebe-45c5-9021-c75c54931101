@@ -6,7 +6,7 @@ use App\DataLoader;
 use App\Reports\Concerns\iReport;
 use JetBrains\PhpStorm\NoReturn;
 
-abstract class Report implements iReport
+abstract class AbstractReportGenerator implements iReport
 {
     protected $students;
     protected $assessments;
