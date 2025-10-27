@@ -99,9 +99,9 @@ class DataLoader
      * (Student can have multiple responses -Returns array of all completed assessments)
      * @throws \Exception
      */
-    public function getStudentResponse($studentId)
+    public function getStudentResponse($studentId): array
     {
-        $reader = new JsonStreamReader($this->dataPath . 'student-responses.json');
+        $reader = new JsonStreamReader($this->dataPath . self::STUDENT_RESPONSES_DATASOURCE);
         $responses = [];
 
         foreach ($reader->parse() as $response) {
@@ -143,5 +143,30 @@ class DataLoader
         }
 
         return $mostRecent;
+    }
+
+
+
+    /**
+     * @throws \Exception
+     */
+    /**
+     * Get ALL completed responses for a Student Assessment
+     * (Student can have multiple responses -Returns array of all completed assessments)
+     * @throws \Exception
+     */
+    public function getResponseByStudentAssessment($studentId, $assessmentId): array
+    {
+        $reader = new JsonStreamReader($this->dataPath . self::STUDENT_RESPONSES_DATASOURCE);
+        $responses = [];
+
+        foreach ($reader->parse() as $response) {
+            if (isset($response?->student?->id) &&
+                $response->student->id === $studentId && $response->assessmentId === $assessmentId) {
+                $responses[] = $response;
+            }
+        }
+
+        return $responses;
     }
 }

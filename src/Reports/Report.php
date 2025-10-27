@@ -4,6 +4,7 @@ namespace App\Reports;
 
 use App\DataLoader;
 use App\Reports\Concerns\iReport;
+use JetBrains\PhpStorm\NoReturn;
 
 abstract class Report implements iReport
 {
@@ -36,7 +37,7 @@ abstract class Report implements iReport
     /**
      * Helper: Format date
      */
-    protected function formatDate($dateString)
+    protected function formatDate($dateString): string
     {
         $date = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString);
         if (!$date) return $dateString;
@@ -56,7 +57,8 @@ abstract class Report implements iReport
     /**
      * Helper: Calculate strand results from ALL responses
      */
-    protected function calculateAggregatedStrandResults($allResponses) {
+    protected function calculateAggregatedStrandResults($allResponses)
+    {
         $results = [];
 
         foreach ($allResponses as $studentResponse) {
@@ -108,5 +110,22 @@ abstract class Report implements iReport
         $completedDate = $this->formatDate($mostRecent->completed);
 
         return "$studentName recently completed $assessmentName assessment on $completedDate\n";
+    }
+
+    /**
+     * @TODO to be removed
+     * @param $output
+     * @return void
+     */
+    #[NoReturn]
+    public function dd(...$output)
+    {
+        foreach ($output as $line) {
+            echo "\n";
+            print_r($line);
+            echo "\n\n";
+        }
+
+        die();
     }
 }
