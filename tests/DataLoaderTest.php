@@ -11,12 +11,12 @@ class DataLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->testDataPath = __DIR__ . '/../data';
+        $this->testDataPath = __DIR__ . '/../data/';
     }
 
     public function testLoadStudentsReturnsArray(): void
     {
-        $loader = new DataLoader($this->testDataPath);
+        $loader =  DataLoader::getInstance($this->testDataPath);
         $students = $loader->loadStudents();
 
         $this->assertIsArray($students);
