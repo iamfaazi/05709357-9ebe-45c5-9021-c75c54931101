@@ -6,15 +6,15 @@ use App\Infrastructure\JsonStreamReader;
 
 class DataLoader
 {
-    const STUDENT_DATASOURCE = 'students.json';
+    const string STUDENT_DATASOURCE = 'students.json';
 
-    const ASSESSMENT_DATASOURCE = 'assessments.json';
+    const string ASSESSMENT_DATASOURCE = 'assessments.json';
 
-    const QUESTIONS_DATASOURCE = 'questions.json';
+    const string QUESTIONS_DATASOURCE = 'questions.json';
 
-    const STUDENT_RESPONSES_DATASOURCE = 'student-responses.json';
+    const string STUDENT_RESPONSES_DATASOURCE = 'student-responses.json';
 
-    const DEFAULT_DATASOURCE_PATH = './data/';
+    const string DEFAULT_DATASOURCE_PATH = './data/';
 
 
     private static ?self $instance = null;
@@ -38,6 +38,8 @@ class DataLoader
 
     /**
      * Singleton accessor method
+     * @param string $dataDir
+     * @return DataLoader
      */
     public static function getInstance(string $dataDir = self::DEFAULT_DATASOURCE_PATH): self
     {

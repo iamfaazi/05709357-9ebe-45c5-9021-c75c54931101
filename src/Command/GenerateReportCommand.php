@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateReportCommand extends Command
 {
-    protected static $defaultName = 'app:generate-report';
+    protected static string $defaultName = 'app:generate-report';
 
     protected function configure(): void
     {
@@ -27,8 +27,7 @@ class GenerateReportCommand extends Command
 
             $io = new SymfonyStyle($input, $output);
 
-            $io->title('Generate Assessments Reports');
-            $io->block('Please enter the following');
+            $io->title('Student Assessments Reports');
 
             // --- Step 1: Ask for Student ID ---
             $studentId = $io->askQuestion(new Question("Student ID: "));

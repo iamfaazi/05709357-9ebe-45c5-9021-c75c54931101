@@ -3,15 +3,15 @@
 namespace App\Reports;
 
 use App\DataLoader;
-use App\Reports\Concerns\iReport;
 use JetBrains\PhpStorm\NoReturn;
+use App\Reports\Concerns\ReportContract;
 
-abstract class AbstractReportGenerator implements iReport
+abstract class AbstractReportGenerator implements ReportContract
 {
-    protected $students;
-    protected $assessments;
-    protected $questions;
-    protected $loader;
+    protected mixed $students;
+    protected mixed $assessments;
+    protected mixed $questions;
+    protected mixed $loader;
 
     public function __construct()
     {
@@ -35,23 +35,25 @@ abstract class AbstractReportGenerator implements iReport
     abstract public function generate($studentId): ?string;
 
     /**
-     * Helper: Format date
+     * Helper: Format date with ordinal suffix (e.g., 1st January 2025 3:45 PM)
      */
     protected function formatDate($dateString): string
     {
         $date = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString);
-        if (!$date) return $dateString;
-
-        $day = $date->format('j');
-        $suffix = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
-
-        if ((($day % 100) >= 11) && (($day % 100) <= 13)) {
-            $suffix = 'th';
-        } else {
-            $suffix = $suffix[$day % 10];
+        if (!$date) {
+            return $dateString;
         }
 
-        return $day . $suffix . $date->format(' F Y g:i A');
+        $day = (int)$date->format('j');
+        $suffix = match (true) {
+            in_array($day % 100, [11, 12, 13]) => 'th',
+            $day % 10 === 1 => 'st',
+            $day % 10 === 2 => 'nd',
+            $day % 10 === 3 => 'rd',
+            default => 'th',
+        };
+
+        return sprintf('%d%s%s', $day, $suffix, $date->format(' F Y g:i A'));
     }
 
     /**

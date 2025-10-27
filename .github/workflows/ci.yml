@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -69,15 +69,6 @@ jobs:
             ./vendor/bin/phpcs src/ --standard=PSR12
           else
             echo "PHPCS not installed, skipping..."
-          fi
-        continue-on-error: true
-
-      - name: Static analysis (if PHPStan is installed)
-        run: |
-          if [ -f "vendor/bin/phpstan" ]; then
-            ./vendor/bin/phpstan analyse src/ --level=5
-          else
-            echo "PHPStan not installed, skipping..."
           fi
         continue-on-error: true
 

@@ -9,7 +9,7 @@ use JsonMachine\Items;
  * JSON STREAM READER
  * Handles streaming JSON parsing
  */
-class JsonStreamReader
+final readonly class JsonStreamReader
 {
 
 
@@ -17,7 +17,7 @@ class JsonStreamReader
      * @param string $filePath
      * @throws Exception
      */
-    public function __construct(private readonly string $filePath)
+    public function __construct(private string $filePath)
     {
         if (!file_exists($filePath)) {
             throw new Exception("File not found: $filePath");
@@ -27,6 +27,7 @@ class JsonStreamReader
     /**
      * Parse JSON file and yield items one by one
      * uses JsonMachine if available, falls back to manual parsing
+     * @throws Exception
      */
     public function parse(): \Generator
     {
